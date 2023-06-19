@@ -1,19 +1,3 @@
-import React from "react";
-
-
-function Categories({ categories, setSelectedCategory}) {
-    return (
-        <div>
-          <h2>Categories</h2>
-          <ul>
-            {categories.map((category) => (
-              <li key={category} onClick={() => setSelectedCategory(category)}>
-                {category}
-              </li>
-            ))}
-          </ul>
-        </div>
-    )
-}
-
-export default Categories;
+version https://git-lfs.github.com/spec/v1
+oid sha256:8be18a71beec43cb70ddad6d1f824731452712c31474c17fa6b7581b96c1c926
+size 412

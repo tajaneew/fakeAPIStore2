@@ -1,34 +1,3 @@
-import React, { useState, createContext } from 'react';
-
-const FavoritesContext = createContext({
-  favorites: [],
-  addFavorite: () => {},
-  removeFromFavorites: () => {},
-  isFavorite: () => {},
-});
-
-const FavoritesProvider = ({ children }) => {
-  const [favorites, setFavorites] = useState([]);
-
-  const addToFavorites = (productId) => {
-    setFavorites((prevFavorites) => [...prevFavorites, productId]);
-  };
-
-  const removeFromFavorites = (productId) => {
-    setFavorites((prevFavorites) => prevFavorites.filter((id) => id !== productId));
-  };
-
-  const isFavorite = (productId) => {
-    return favorites.includes(productId);
-  };
-
-  return (
-    <FavoritesContext.Provider value={{ favorites, addFavorite: addToFavorites, removeFromFavorites, isFavorite }}>
-      {children}
-    </FavoritesContext.Provider>
-  );
-};
-
-export { FavoritesProvider, FavoritesContext };
-
-export default FavoritesContext;
+version https://git-lfs.github.com/spec/v1
+oid sha256:993a9402da7b6852ca8d13c292f8ab0720abe17966ff1ebc8848445cde1c95e1
+size 907

@@ -71,3 +71,8 @@ img {
 ul {
   font-size: 2rem;
 }
+
+nav li {
+  display: flex;
+  flex-direction: column;
+ }

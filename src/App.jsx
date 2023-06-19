@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Categories from './components/Categories';
 import ProductDetails from './ProductDetails';
+import { FavoritesProvider } from './context/FavoritesContext';
+import FavoritesPage from './components/FavoritesPage';
+import HeartIcon from './components/HeartIcon';
+
+
+
 
 const App = () => {
   const [categories, setCategories] = useState([]);
@@ -21,7 +28,8 @@ const App = () => {
     }
   }, [selectedCategory]);
 
-  async function fetchCategories() {
+  async function fetchCategories() { 
+     // Fetches the categories from the API and sets the state
     try {
       const response = await fetch('https://fakestoreapi.com/products/categories');
       const categories = await response.json();
@@ -32,6 +40,7 @@ const App = () => {
   }
 
   async function fetchProducts(category) {
+    // Fetches the products based on the selected category from the API and sets the state
     setLoading(true);
     try {
       const url = category
@@ -47,44 +56,65 @@ const App = () => {
     }
   }
 
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
   return (
     <BrowserRouter>
+    <FavoritesProvider>
       <div>
-        <h2>Fake API Store</h2>
+      <h2>Fake API Store</h2>
+        <nav>
+        <ul>
+          <li>
+            <Link to= "/">Home</Link>
+          </li>
+          <li>
+            <Link to="/favorites">Favorites</Link>
+          </li>
+        </ul>
 
-        <div>
-          <h2>Categories</h2>
-          <ul>
-            {categories.map((category) => (
-              <li key={category} onClick={() => setSelectedCategory(category)}>
-                {category}
-              </li>
-            ))}
-          </ul>
-        </div>
+        </nav>
 
-        <div className="container">
-          {products.map((product) => (
-            <div className="box" key={product.id}>
-              <div className="content">
-                <h5>{product.title}</h5>
-                <p>{product.description}</p>
-              </div>
-              <img src={product.image} alt="" />
-            </div>
-          ))}
-        </div>
+       
+        <Routes>
+        <Route path="/" element={
+                <div>
+                  <Categories
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory ={handleCategoryChange}
+                  />
 
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
           <p>Error: {error}</p>
         ) : null}
+         <div className="container">
+          {products.map((product) => (
+            <div className="box" key={product.id}>
+              <Link to={`/products/${product.id}`}>
+              <div className="content">
+                <h5>{product.title}</h5>
+                <p>{product.description}</p>
+              </div>
+              <img src={product.image} alt="{product.title}" />
+              </Link>
+              <HeartIcon productId={product.id} />
+              
+            </div>
+          ))}
+        </div>
+        </div> 
+        } />
 
-        <Routes>
+          <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/product/:id" element={<ProductDetails />} />
         </Routes>
-      </div>
+        </div>
+        </FavoritesProvider>
     </BrowserRouter>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+
 function ProductDetails() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -13,8 +14,18 @@ function ProductDetails() {
 
   async function fetchProductDetails(productId) {
     try {
-      const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
+      const response = await fetch(`https://fakestoreapi.com/products/${productId}`)
+     
+      if (!response.ok) {
+        throw new Error('Error fetching product details');
+      };
+
       const product = await response.json();
+      if (Object.keys(product).length === 0) {
+        throw new Error('Empty response');
+      }
+
+
       return product;
     } catch (error) {
       throw error;
@@ -27,7 +38,7 @@ function ProductDetails() {
 
   return (
     <div>
-      <h1>Fake API Store</h1>
+      <h1>Product Details</h1>
       <div className="container">
         <div className="box" key={product.id}>
           <div className="content">
